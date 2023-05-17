@@ -78,4 +78,10 @@ Generates the flowchart
 \examples{
 data <- tibble::tibble(from = c("A", "A", "A", "B", "C", "F"), to = c("B", "C", "D", "E", "F", "G"))
 ggflowchart(data)
+
+data <- tibble::tibble(from = c("A", "A", "A", "B", "C", "F"),
+to = c("B", "C", "D", "E", "F", "G"))
+node_data <- tibble::tibble(name = c("A", "B", "C", "D", "E", "F","G"),
+shape = c("r","r","c","c","c","c","c"))
+ggflowchart(data, node_data)
 }
