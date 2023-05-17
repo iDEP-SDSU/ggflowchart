@@ -28,8 +28,8 @@ column are "from" node names,
 second column is "to" node names. Node names must be unique.}
 
 \item{node_data}{Data frame or tibble of node information. Must have at
-least one column
-called "name" for node names to join by. Default NULL.}
+least one column called "name" for node names to join by. Node info can be
+for example shape = c('r','c'). Default NULL.}
 
 \item{fill}{Fill colour of nodes. Must be a valid colour name or hex
 code, or the name of a column in node_data (quoted or unquoted).
