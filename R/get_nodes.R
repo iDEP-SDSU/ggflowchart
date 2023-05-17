@@ -1,6 +1,6 @@
 #' Get nodes
 #'
-#' Define the corners of the nodes.
+#' Define the corners of the rectangular nodes and radius or circle nodes.
 #'
 #' @param node_layout Data frame of node layout returned by \code{get_layout()}
 #' @param x_nudge Distance from centre of edge of node box in x direction. Default 0.35.
@@ -17,6 +17,7 @@ get_nodes <- function(node_layout,
     dplyr::mutate(xmin = .data$x - x_nudge,
                   xmax = .data$x + x_nudge,
                   ymin = .data$y - y_nudge,
-                  ymax = .data$y + y_nudge)
+                  ymax = .data$y + y_nudge,
+                  r = min(c(x_nudge,y_nudge),na.rm = TRUE))
   return(plot_nodes)
 }
