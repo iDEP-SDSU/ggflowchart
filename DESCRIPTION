@@ -14,12 +14,13 @@ LazyData: true
 Depends: 
   R (>= 3.6)
 Imports:
-  dplyr,
-  igraph,
-  ggplot2,
-  rlang,
-  tibble, 
-  tidyr
+    dplyr,
+    igraph,
+    ggplot2,
+    rlang,
+    tibble,
+    tidyr,
+    ggforce
 Suggests: 
   knitr,
   rcartocolor,
