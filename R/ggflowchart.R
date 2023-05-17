@@ -6,8 +6,8 @@
 #' column are "from" node names,
 #' second column is "to" node names. Node names must be unique.
 #' @param node_data Data frame or tibble of node information. Must have at
-#' least one column
-#' called "name" for node names to join by. Default NULL.
+#' least one column called "name" for node names to join by. Node info can be
+#' for example shape = c('r','c'). Default NULL.
 #' @param fill Fill colour of nodes. Must be a valid colour name or hex
 #' code, or the name of a column in node_data (quoted or unquoted).
 #' Column names take priority over names of colours. Default "white".
@@ -39,6 +39,12 @@
 #' @examples
 #' data <- tibble::tibble(from = c("A", "A", "A", "B", "C", "F"), to = c("B", "C", "D", "E", "F", "G"))
 #' ggflowchart(data)
+#'
+#' data <- tibble::tibble(from = c("A", "A", "A", "B", "C", "F"),
+#' to = c("B", "C", "D", "E", "F", "G"))
+#' node_data <- tibble::tibble(name = c("A", "B", "C", "D", "E", "F","G"),
+#' shape = c("r","r","c","c","c","c","c"))
+#' ggflowchart(data, node_data)
 ggflowchart <- function(data,
                         node_data = NULL,
                         fill = "white",
@@ -75,6 +81,13 @@ ggflowchart <- function(data,
   node_layout <- get_layout(data = data)
   # add edge attributes
   node_layout <- add_node_attr(node_layout, node_data)
+  # check if shapes are given by user
+  if ("shape" %notin% colnames(node_data)) {
+    # add default rectangular shape
+    shape_data <- tibble::tibble(name = node_layout$name,
+                                 shape = rep("r",length(node_layout$name)))
+    node_layout <- add_node_attr(node_layout, shape_data)
+  }
   # define edges of node rectangles
   plot_nodes <- get_nodes(
     node_layout = node_layout,
@@ -95,9 +108,23 @@ ggflowchart <- function(data,
   p <- ggplot2::ggplot()
   # add nodes
   if (as.character(fill) %in% colnames(node_data)) {
+    # add circle nodes
+    p <- p +
+      ggforce::geom_circle(
+        data = plot_nodes[(plot_nodes$shape=="c"),],
+        mapping = ggplot2::aes(
+          x0 = (.data$xmin + .data$xmax)/2,
+          y0 = (.data$ymin + .data$ymax)/2,
+          r = .data$r,
+          fill=!!fill
+        ),
+        alpha = 0.5,
+        colour = colour
+      )
+    # add rectangular nodes
     p <- p +
       ggplot2::geom_rect(
-        data = plot_nodes,
+        data = plot_nodes[(plot_nodes$shape=="r"),],
         mapping = ggplot2::aes(
           xmin = .data$xmin,
           ymin = .data$ymin,
@@ -109,9 +136,23 @@ ggflowchart <- function(data,
         colour = colour
       )
   } else {
+    # add circle nodes
+    p <- p +
+      ggforce::geom_circle(
+        data = plot_nodes[(plot_nodes$shape=="c"),],
+        mapping = ggplot2::aes(
+          x0 = (.data$xmin + .data$xmax)/2,
+          y0 = (.data$ymin + .data$ymax)/2,
+          r = .data$r
+        ),
+        alpha = 0.5,
+        colour = colour,
+        fill = as.character(fill)
+      )
+    # add rectangular nodes
     p <- p +
       ggplot2::geom_rect(
-        data = plot_nodes,
+        data = plot_nodes[(plot_nodes$shape=="r"),],
         mapping = ggplot2::aes(
           xmin = .data$xmin,
           ymin = .data$ymin,

@@ -28,8 +28,8 @@ column are "from" node names,
 second column is "to" node names. Node names must be unique.}
 
 \item{node_data}{Data frame or tibble of node information. Must have at
-least one column
-called "name" for node names to join by. Default NULL.}
+least one column called "name" for node names to join by. Node info can be
+for example shape = c('r','c'). Default NULL.}
 
 \item{fill}{Fill colour of nodes. Must be a valid colour name or hex
 code, or the name of a column in node_data (quoted or unquoted).
@@ -78,4 +78,10 @@ Generates the flowchart
 \examples{
 data <- tibble::tibble(from = c("A", "A", "A", "B", "C", "F"), to = c("B", "C", "D", "E", "F", "G"))
 ggflowchart(data)
+
+data <- tibble::tibble(from = c("A", "A", "A", "B", "C", "F"),
+to = c("B", "C", "D", "E", "F", "G"))
+node_data <- tibble::tibble(name = c("A", "B", "C", "D", "E", "F","G"),
+shape = c("r","r","c","c","c","c","c"))
+ggflowchart(data, node_data)
 }
