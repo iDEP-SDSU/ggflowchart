@@ -75,6 +75,13 @@ ggflowchart <- function(data,
   node_layout <- get_layout(data = data)
   # add edge attributes
   node_layout <- add_node_attr(node_layout, node_data)
+  # check if shapes are given by user
+  if ("shape" %notin% colnames(node_data)) {
+    # add default rectangular shape
+    shape_data <- tibble::tibble(name = node_layout$name,
+                                 shape = rep("r",length(node_layout$name)))
+    node_layout <- add_node_attr(node_layout, shape_data)
+  }
   # define edges of node rectangles
   plot_nodes <- get_nodes(
     node_layout = node_layout,
