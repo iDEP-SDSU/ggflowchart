@@ -102,9 +102,23 @@ ggflowchart <- function(data,
   p <- ggplot2::ggplot()
   # add nodes
   if (as.character(fill) %in% colnames(node_data)) {
+    # add circle nodes
+    p <- p +
+      ggforce::geom_circle(
+        data = plot_nodes[(plot_nodes$shape=="c"),],
+        mapping = ggplot2::aes(
+          x0 = (.data$xmin + .data$xmax)/2,
+          y0 = (.data$ymin + .data$ymax)/2,
+          r = .data$r,
+          fill=!!fill
+        ),
+        alpha = 0.5,
+        colour = colour
+      )
+    # add rectangular nodes
     p <- p +
       ggplot2::geom_rect(
-        data = plot_nodes,
+        data = plot_nodes[(plot_nodes$shape=="r"),],
         mapping = ggplot2::aes(
           xmin = .data$xmin,
           ymin = .data$ymin,
@@ -116,9 +130,23 @@ ggflowchart <- function(data,
         colour = colour
       )
   } else {
+    # add circle nodes
+    p <- p +
+      ggforce::geom_circle(
+        data = plot_nodes[(plot_nodes$shape=="c"),],
+        mapping = ggplot2::aes(
+          x0 = (.data$xmin + .data$xmax)/2,
+          y0 = (.data$ymin + .data$ymax)/2,
+          r = .data$r
+        ),
+        alpha = 0.5,
+        colour = colour,
+        fill = as.character(fill)
+      )
+    # add rectangular nodes
     p <- p +
       ggplot2::geom_rect(
-        data = plot_nodes,
+        data = plot_nodes[(plot_nodes$shape=="r"),],
         mapping = ggplot2::aes(
           xmin = .data$xmin,
           ymin = .data$ymin,
