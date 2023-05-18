@@ -79,6 +79,12 @@ ggflowchart <- function(data,
   }
   # define position of nodes
   node_layout <- get_layout(data = data)
+  #sort each layer by name, and center
+  node_layout <- node_layout |>
+    dplyr::arrange(-y, name) |>
+    dplyr::group_by(y) |>
+    dplyr::mutate(x = sort(x)) |> # sort
+    dplyr::mutate(x = floor(x - mean(x))) #center
   # add edge attributes
   node_layout <- add_node_attr(node_layout, node_data)
   # check if shapes are given by user
