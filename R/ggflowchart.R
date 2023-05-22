@@ -84,7 +84,7 @@ ggflowchart <- function(data,
     dplyr::arrange(-y, name) |>
     dplyr::group_by(y) |>
     dplyr::mutate(x = sort(x)) |> # sort
-    dplyr::mutate(x = floor(x - mean(x))) #center
+    dplyr::mutate(x = x - mean(x)) #center
   # add edge attributes
   node_layout <- add_node_attr(node_layout, node_data)
   # check if shapes are given by user
